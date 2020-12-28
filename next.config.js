@@ -7,7 +7,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const baseConfig = withBundleAnalyzer({
   images: {
-    domains: ['raw.githubusercontent.com', 'github.githubassets.com'],
+    domains: ['m.media-amazon.com', 'media-amazon.com'],
   },
   webpack(config, { webpack }) {
     config.module.rules.push({
