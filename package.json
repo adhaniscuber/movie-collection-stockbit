@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "goods-core": "^1.6.15",
+    "goods-helper": "^1.1.8",
     "goods-ui": "^1.10.10",
     "next": "10.0.4",
     "next-pwa": "^5.0.1",
