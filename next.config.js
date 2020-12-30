@@ -42,5 +42,9 @@ module.exports = withPWA({
     clientsClaim: true,
     skipWaiting: true,
   },
+  env: {
+    BASE_URL: 'https://www.omdbapi.com',
+    API_KEY: '6a201d46',
+  },
   ...baseConfig,
 })

@@ -1,21 +1,62 @@
 import { Box, Text } from 'goods-core'
-import { DropdownAsync } from 'goods-ui'
+import { Icon } from 'goods-core/ssr'
+import {Input } from 'goods-ui'
 import Head from 'next/head'
 import Image from 'next/image'
+import { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllMovie } from '../services'
+import { fetchMovieList } from '../store/movies/actions'
+import { useRouter } from 'next/router'
+import { MoviesGrid } from '../components/organims'
 
 export default function Home() {
+  const router = useRouter()
+
+  const {
+    movieList,
+    loading,
+    error,
+    searchKey,
+    page,
+    totalMovies,
+  } = useSelector(state => state.movie);
+
+  const dispatch = useDispatch()
+
+  const onNextPage = useCallback(() => {
+    dispatch(fetchMovieList({ pageChanged: true }));
+  }, []);
+
+  useEffect(() => {
+    const s = ''
+    if (s && s.length >= 3 && s !== searchKey) {
+      dispatch({ type: 'SET_SEARCH_KEY', payload: { searchKey: s } });
+    } else {
+      router.replace(`?s=${searchKey}`);
+    }
+    return () => {
+      dispatch({ type: 'RESET_ERROR' });
+    };
+  }, []);
+
+  useEffect(() => {
+    if (page === 1 && searchKey.length >= 3) {
+      dispatch(fetchMovieList());
+    }
+  }, [searchKey, page]);
+
+  useEffect(() => {
+    dispatch(fetchMovieList({ pageChanged: true }));
+  }, [])
+
   return (
     <Box w>
       <Box w maxW='800px' m='0 auto' p ='xl'>
         <Box w>
-          <DropdownAsync />
+          <Input prefix={<Icon name='search' c='blue50' w='60px' h='60px' />} placeholder='Search movies...' />
         </Box>
-        <Box w>
-          <Box shadow='high' radius='l' overflow='hidden'>
-            <Image width={100} height={200} src='https://m.media-amazon.com/images/M/MV5BMTg4MDk1ODExN15BMl5BanBnXkFtZTgwNzIyNjg3MDE@._V1_SX300.jpg' />
-            <Text>Name</Text>
-          </Box>
-        </Box>
+        <MoviesGrid movies={movieList} />
       </Box>
     </Box>
   )
